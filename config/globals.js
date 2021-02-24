@@ -35,8 +35,6 @@ module.exports = function () {
   process.env.ENABLE_DEBUG_LOGGING 
   || process.env.DEFAULT_ENABLE_DEBUG_LOGGING;
 
-  global.locales = [];
-
   global.httpStatusCode = 
   require(ROOT_PATH + process.env.PATH_TO_HTTP_STATUS_CODE);
 
@@ -97,15 +95,6 @@ module.exports = function () {
     }
   });
 
-  // load language files
-  fs.readdirSync(ROOT_PATH + process.env.LANGUAGE_PATH)
-  .forEach(function (file) {
-    if (file.match(/\.json$/) !== null) {
-      var name = file.replace('.json', '');
-      global.locales.push(name)
-    }
-  });
-
   // Load all kafka consumer files
   fs.readdirSync(ROOT_PATH + process.env.PATH_TO_KAFKA_CONSUMERS)
   .forEach(function (file) {
@@ -145,43 +134,4 @@ module.exports = function () {
   });
 
   global.sessions = {};
-
-  // <- Dirty fix. Not required currently.
-   
-  // let versions = new Promise(async function(resolve, reject) {
-    
-  //   let versions = await database.models.appReleases.find({
-  //     status:"active"
-  //   }).lean();
-
-  //   resolve(versions);
-
-  // });
-  
-  // versions.then(function( versionData ) {
-    
-  //   if( versionData.length > 0 ) {
-  //     versionData.forEach(value=>{
-        
-  //       global.sessions[`allAppVersion-${value.appName}-${value.os}`] = {
-  //         is_read : false,
-  //         internal : true,
-  //         action : "versionUpdate",
-  //         appName : value.appName,
-  //         text : value.text,
-  //         title : value.title,
-  //         type : "Information",
-  //         payload : {
-  //             appVersion : value.version,
-  //             updateType : value.releaseType,
-  //             type : "appUpdate",
-  //             os : value.os,
-  //             releaseNotes : value.releaseNotes
-  //         },
-  //         appType : value.appType
-  //       };
-  //     })
-  //   }
-  // });
-
 };

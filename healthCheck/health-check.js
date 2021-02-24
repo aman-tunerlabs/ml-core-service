@@ -8,12 +8,10 @@
 // Dependencies
 
 const { v1 : uuidv1 } = require('uuid');
-const assessmentHealthCheck = require("./assessments");
 const sunbirdHealthCheck = require("./sunbird");
 const mongodbHealthCheck = require("./mongodb");
 const kafkaHealthCheck = require("./kafka");
 const elasticSearchHealthCheck = require("./elastic-search");
-const gotenbergHealthCheck = require("./gotenberg");
 
 const obj = {
     MONGO_DB: {
@@ -55,17 +53,13 @@ let health_check = async function(req,res) {
     let checks = [];
     let mongodbConnection = await mongodbHealthCheck.health_check();
     let kafkaConnection = await kafkaHealthCheck.health_check();
-    let assessmentServiceStatus = await assessmentHealthCheck.health_check();
     let sunbirdServiceStatus = await sunbirdHealthCheck.health_check();
     let elasticSearchConnection = await elasticSearchHealthCheck.health_check();
-    let gotenbergStatus = await gotenbergHealthCheck.health_check();
 
     checks.push(checkResult("KAFKA",kafkaConnection));
     checks.push(checkResult("MONGO_DB",mongodbConnection));
-    checks.push(checkResult("ASSESSMENT_SERVICE",assessmentServiceStatus));
     checks.push(checkResult("SUNBIRD_SERVICE",sunbirdServiceStatus));
     checks.push(checkResult("ELASTIC_SEARCH",elasticSearchConnection));
-    checks.push(checkResult("GOTENBERG",gotenbergStatus));
 
     let checkServices = checks.filter( check => check.healthy === false);
 

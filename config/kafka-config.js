@@ -1,20 +1,8 @@
 //dependencies
 let kafka = require('kafka-node');
 
-const LANGUAGE_TOPIC = process.env.LANGUAGE_TOPIC || 
-process.env.DEFAULT_LANGUAGE_TOPIC;
-
 const EMAIL_TOPIC = process.env.EMAIL_TOPIC || 
 process.env.DEFAULT_EMAIL_TOPIC;
-
-const NOTIFICATIONS_TOPIC = process.env.NOTIFICATIONS_TOPIC || 
-process.env.DEFAULT_NOTIFICATIONS_TOPIC;
-
-const APPLICATION_CONFIG_TOPIC = process.env.APPLICATION_CONFIG_TOPIC || 
-process.env.DEFAULT_APPLICATION_CONFIG_TOPIC;
-
-const IMPROVEMENT_PROJECT_NOTIFICATIONS_TOPIC = 
-process.env.IMPROVEMENT_PROJECT_NOTIFICATIONS_TOPIC;
 
 /**
   * Kafka configuration.
@@ -47,32 +35,10 @@ var connect = function (config) {
     logger.error("Kafka producer creation error!");
   })
 
-  
-  _sendToKafkaConsumers(
-    config.topics["notificationsTopic"],
-    config.host
-  );
-
-  _sendToKafkaConsumers(
-    config.topics["languagesTopic"],
-    config.host
-  );
-
   _sendToKafkaConsumers(
     config.topics["emailTopic"],
     config.host
   );
-
-  _sendToKafkaConsumers(
-    config.topics["appConfigTopic"],
-    config.host
-  );
-
-  _sendToKafkaConsumers(
-    config.topics["improvementProjectTopic"],
-    config.host
-  );
-  
 
   return {
     kafkaProducer: producer,
@@ -104,31 +70,15 @@ var _sendToKafkaConsumers = function (topic,host) {
     );  
 
     consumer.on('message', async function (message) {
-
-      if (message && message.topic === APPLICATION_CONFIG_TOPIC) {
-        applicationconfigConsumer.messageReceived(message);
-      } else if (message && message.topic === LANGUAGE_TOPIC) {
-        languagesConsumer.messageReceived(message);
-      } else if (message && message.topic === EMAIL_TOPIC) {
+      if (message && message.topic === EMAIL_TOPIC) {
         emailConsumer.messageReceived(message, consumer);
-      } else if (message && message.topic === NOTIFICATIONS_TOPIC) {
-        inappnotificationsConsumer.messageReceived(message);
-        pushnotificationsConsumer.messageReceived(message);
       }
     });
 
     consumer.on('error', async function (error) {
-
-      if(error.topics && error.topics[0] === APPLICATION_CONFIG_TOPIC) {
-        applicationconfigConsumer.errorTriggered(error);
-      } else if (error.topics && error.topics[0] === LANGUAGE_TOPIC) {
-        languagesConsumer.errorTriggered(error);
-      } else if (error.topics && error.topics[0] === EMAIL_TOPIC) {
+      if (error.topics && error.topics[0] === EMAIL_TOPIC) {
         emailConsumer.errorTriggered(error);
-      } else if(error.topics && error.topics[0] === NOTIFICATIONS_TOPIC){
-        inappnotificationsConsumer.errorTriggered(error);
-        pushnotificationsConsumer.errorTriggered(error);
-      } 
+      }
     });
 
   }
