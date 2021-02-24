@@ -16,7 +16,6 @@ require("./healthCheck")(app);
 
 global.config = require("./config");
 require("./config/globals")();
-require("./generics/scheduler");
 
 let router = require("./routes");
 

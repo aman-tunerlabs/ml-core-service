@@ -12,31 +12,11 @@ const pagination = require(ROOT_PATH + "/generics/middleware/pagination");
 const fs = require("fs");
 const inputValidator = require(ROOT_PATH + "/generics/middleware/validator");
 const dataSetUpload = require(ROOT_PATH + "/generics/middleware/dataSetUpload");
-const setLanguage = require(ROOT_PATH + "/generics/middleware/set-language");
-var i18next = require("i18next");
-var i18NextMiddleware = require("i18next-express-middleware");
-let nodeFsBackend = require('i18next-node-fs-backend');
-
-i18next.use(nodeFsBackend).init({
-  fallbackLng: global.locales[0],
-  lowerCaseLng: true,
-  preload: global.locales,
-  backend: {
-    loadPath: ROOT_PATH + '/locales/{{lng}}.json',
-  },
-  saveMissing: true
-});
 
 module.exports = function (app) {
 
   const APPLICATION_BASE_URL = 
   gen.utils.checkIfEnvDataExistsOrNot("APPLICATION_BASE_URL");
-  
-  app.use(
-    i18NextMiddleware.handle(i18next, {
-      removeLngFromUrl: false
-    })
-  );
 
   if (process.env.NODE_ENV !== "testing") {
     app.use(APPLICATION_BASE_URL, authenticator);
@@ -44,7 +24,6 @@ module.exports = function (app) {
 
   app.use(APPLICATION_BASE_URL, dataSetUpload);
   app.use(APPLICATION_BASE_URL, pagination);
-  app.use(APPLICATION_BASE_URL, setLanguage);
 
   var router = async function (req, res, next) {
 
