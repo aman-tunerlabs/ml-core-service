@@ -18,6 +18,11 @@ jobs:
           key: dependency-cache-{{checksum "package.json"}}
           paths:
             - ./node_modules
+      - run:
+          name: Creating Dummy Artifacts
+          command: mkdir /project/artifacts
+      - store_artifacts:
+          path: /project/artifacts
       - sonarcloud/scan
 orbs:
   sonarcloud: sonarsource/sonarcloud@1.0.0
