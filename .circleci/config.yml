@@ -19,10 +19,17 @@ jobs:
           paths:
             - ./node_modules
       - run:
-          name: Creating Dummy Artifacts
-          command: mkdir artifacts
+          name: make artifacts directories
+          command: |
+            mkdir artifacts
+            mkdir artifacts/test-reports
+      - run:
+          name: Executing unit test cases
+          command: npm test
       - store_artifacts:
           path: artifacts
+      - store_test_results:
+          path: artifacts/test-reports
       - sonarcloud/scan
 orbs:
   sonarcloud: sonarsource/sonarcloud@1.0.0
