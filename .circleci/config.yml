@@ -20,9 +20,9 @@ jobs:
             - ./node_modules
       - run:
           name: Creating Dummy Artifacts
-          command: mkdir /project/artifacts
+          command: mkdir artifacts
       - store_artifacts:
-          path: /project/artifacts
+          path: artifacts
       - sonarcloud/scan
 orbs:
   sonarcloud: sonarsource/sonarcloud@1.0.0
