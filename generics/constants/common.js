@@ -10,7 +10,6 @@ module.exports = {
   "SUCCESS" : "Success.",
   "FAILED" : "Failed.",
   "OK" : "OK",
-  "BODH_DIAL_CODE_LIVE_STATUS" : "Live",
   "USER_PROFILE_PENDING_VERIFICATION_STATUS":"pendingVerification",
   "USER_PROFILE_NOT_VERIFIED_STATUS":"notVerified",
   "USER_PROFILE_VERIFIED_STATUS":"verified",
